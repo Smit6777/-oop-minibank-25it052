@@ -5,6 +5,29 @@ public class MiniBank {
         BankInfo info = new BankInfo("MiniBank", "Main Branch");
         System.out.println("=== Welcome to " + info.name() + " (" + info.branch() + ") ===");
         
+        Account[] accounts = new Account[3];
+        accounts[0] = new Account("Alice", 1000);
+        accounts[1] = new Account("Bob"); 
+        accounts[2] = new Account("Charlie", 5000);
+
+        System.out.println("\n--- Performing Transactions ---");
+        accounts[0].deposit(500);
+        System.out.println("Deposited 500 to Alice's account.");
+        
+        accounts[1].deposit(200);
+        System.out.println("Deposited 200 to Bob's account.");
+        
+        boolean success = accounts[2].withdraw(1000);
+        System.out.println("Charlie withdrew 1000: " + (success ? "Success" : "Failed"));
+        
+        System.out.println("\n--- Final Account Balances ---");
+        for (Account acc : accounts) {
+            System.out.println("Account: " + acc.getAccountNumber() + 
+                               " | Owner: " + acc.getOwnerName() + 
+                               " | Balance: Rs." + acc.getBalance());
+        }
+        System.out.println("------------------------------\n");
+
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         
@@ -19,13 +42,12 @@ public class MiniBank {
             
             if (!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number between 1 and 5.");
-                scanner.next(); // consume invalid input
+                scanner.next(); 
                 continue;
             }
             
             int choice = scanner.nextInt();
             
-            // Map the integer choice to a MenuOption
             MenuOption option = switch (choice) {
                 case 1 -> MenuOption.OPEN_ACCOUNT;
                 case 2 -> MenuOption.DEPOSIT;
@@ -40,7 +62,6 @@ public class MiniBank {
                 continue;
             }
             
-            // Switch expression to evaluate a message based on the option
             String message = switch (option) {
                 case OPEN_ACCOUNT -> "Open Account — to be implemented in a later lab";
                 case DEPOSIT -> "Deposit — to be implemented in a later lab";
