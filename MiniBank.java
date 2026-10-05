@@ -12,19 +12,21 @@ public class MiniBank {
 
         System.out.println("\n--- Performing Transactions ---");
         accounts[0].deposit(500);
-        System.out.println("Deposited 500 to Alice's account.");
-        
         accounts[1].deposit(200);
-        System.out.println("Deposited 200 to Bob's account.");
+        accounts[2].withdraw(1000);
         
-        boolean success = accounts[2].withdraw(1000);
-        System.out.println("Charlie withdrew 1000: " + (success ? "Success" : "Failed"));
-        
-        System.out.println("\n--- Final Account Balances ---");
+        System.out.println("\n--- Printing Accounts (Testing toString) ---");
         for (Account acc : accounts) {
-            System.out.println("Account: " + acc.getAccountNumber() + 
-                               " | Owner: " + acc.getOwnerName() + 
-                               " | Balance: Rs." + acc.getBalance());
+            System.out.println(acc.toString());
+        }
+
+        System.out.println("\n--- Testing equals() and instanceof ---");
+        Account acc4 = new Account("Alice", 1500);
+        System.out.println("Is Alice's first account equal to her new account? " + accounts[0].equals(acc4));
+        System.out.println("Is Alice's first account equal to itself? " + accounts[0].equals(accounts[0]));
+
+        if (accounts[0] instanceof Account) {
+            System.out.println("Confirmed: accounts[0] is an instance of the Account class.");
         }
         System.out.println("------------------------------\n");
 
