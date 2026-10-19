@@ -6,9 +6,9 @@ public class MiniBank {
         System.out.println("=== Welcome to " + info.name() + " (" + info.branch() + ") ===");
         
         Account[] accounts = new Account[3];
-        accounts[0] = new Account("Alice", 1000);
-        accounts[1] = new Account("Bob"); 
-        accounts[2] = new Account("Charlie", 5000);
+        accounts[0] = new SavingsAccount("Alice", 2000, 500);
+        accounts[1] = new CurrentAccount("Bob", 1000, 2000);
+        accounts[2] = new FixedDepositAccount("Charlie", 10000);
 
         System.out.println("\n--- Performing Transactions ---");
         accounts[0].deposit(500);
@@ -20,13 +20,19 @@ public class MiniBank {
             System.out.println(acc.toString());
         }
 
-        System.out.println("\n--- Testing equals() and instanceof ---");
-        Account acc4 = new Account("Alice", 1500);
-        System.out.println("Is Alice's first account equal to her new account? " + accounts[0].equals(acc4));
-        System.out.println("Is Alice's first account equal to itself? " + accounts[0].equals(accounts[0]));
-
-        if (accounts[0] instanceof Account) {
-            System.out.println("Confirmed: accounts[0] is an instance of the Account class.");
+        System.out.println("\n--- Testing Polymorphism and Pattern Matching instanceof ---");
+        for (Account acc : accounts) {
+            System.out.println("Account: " + acc.getAccountNumber() + 
+                               " | Type: " + acc.getClass().getSimpleName() + 
+                               " | Interest Rate: " + acc.interestRate() + "%");
+            
+            if (acc instanceof SavingsAccount sa) {
+                System.out.println("  -> Special Savings Info: Minimum Balance required is Rs." + sa.getMinBalance());
+            } else if (acc instanceof CurrentAccount ca) {
+                System.out.println("  -> Special Current Info: Overdraft Limit is Rs." + ca.getOverdraftLimit());
+            } else if (acc instanceof FixedDepositAccount) {
+                System.out.println("  -> Special Fixed Deposit Info: Account is locked (canWithdraw: " + acc.canWithdraw(100) + ")");
+            }
         }
         System.out.println("------------------------------\n");
 
