@@ -30,6 +30,32 @@ public class MiniBank {
         }
         System.out.println("------------------------------\n");
 
+        System.out.println("\n--- Testing PR4 Features ---");
+        System.out.println("Valid Mobile (9876543210): " + Validator.isValidMobile("9876543210"));
+        System.out.println("Invalid Mobile (123456789): " + Validator.isValidMobile("123456789"));
+        
+        System.out.println("Valid Email (test@example.com): " + Validator.isValidEmail("test@example.com"));
+        System.out.println("Invalid Email (test.example.com): " + Validator.isValidEmail("test.example.com"));
+        
+        System.out.println("Valid PAN (ABCDE1234F): " + Validator.isValidPan("ABCDE1234F"));
+        System.out.println("Invalid PAN (ABCD12345F): " + Validator.isValidPan("ABCD12345F"));
+        
+        System.out.println("Valid IFSC (SBIN0123456): " + Validator.isValidIfsc("SBIN0123456"));
+        System.out.println("Invalid IFSC (SBIN1234567): " + Validator.isValidIfsc("SBIN1234567"));
+
+        System.out.println("\nTesting Command Parser:");
+        String sampleCommand = "DEPOSIT AC0001 500";
+        Command parsedCommand = CommandParser.parse(sampleCommand);
+        if (parsedCommand != null) {
+            System.out.println("Parsed Command -> Type: " + parsedCommand.type() + 
+                               ", Account: " + parsedCommand.accountNumber() + 
+                               ", Amount: " + parsedCommand.amount());
+        }
+
+        System.out.println("\nTesting Statement Formatter:");
+        System.out.println(StatementFormatter.buildStatement(accounts[0]));
+        System.out.println("------------------------------\n");
+
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         
