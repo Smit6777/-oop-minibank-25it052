@@ -1,3 +1,5 @@
+package model;
+
 public class Customer implements Cloneable {
     private final String customerId;
     private String name;
