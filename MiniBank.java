@@ -6,11 +6,15 @@ import service.TransactionProcessor;
 import service.TransferService;
 import service.WithdrawRule;
 import util.AnnotationValidator;
+import util.ReportGenerator;
+import util.StatePersister;
 import util.TransactionBuffer;
+import util.TransactionLog;
 import util.TransactionSession;
 import util.Validator;
 import static util.StatementFormatter.buildStatement;
 
+import java.nio.file.*;
 import java.util.Scanner;
 
 public class MiniBank {
@@ -147,6 +151,30 @@ public class MiniBank {
         } catch (InterruptedException e) {
             System.out.println("Interrupted: " + e.getMessage());
         }
+        System.out.println("----------------------------------------------------\n");
+
+        System.out.println("\n--- Testing PR11 Serialization, Transaction Log & Report ---");
+        Path logsFolder = Paths.get("logs");
+        Path saveFile = Paths.get("accounts.dat");
+        Path reportFile = Paths.get("report.txt");
+
+        try { Files.createDirectories(logsFolder); } catch (Exception e) { System.out.println(e.getMessage()); }
+
+        // Log some sample transactions
+        TransactionLog.append(logsFolder.resolve("transactions.log"), "DEPOSIT, 500, AC0001");
+        TransactionLog.append(logsFolder.resolve("transactions.log"), "DEPOSIT, 300, AC0002");
+        TransactionLog.append(logsFolder.resolve("transactions.log"), "WITHDRAW, 200, AC0001");
+
+        // Save and reload accounts
+        StatePersister.save(accounts, saveFile);
+        Account[] loaded = StatePersister.load(saveFile);
+        System.out.println("Loaded accounts from disk:");
+        for (Account acc : loaded) {
+            System.out.println(acc.toString());
+        }
+
+        // Generate end of day report
+        ReportGenerator.generate(logsFolder, reportFile);
         System.out.println("----------------------------------------------------\n");
 
         System.out.println("\n--- Printing Accounts (Testing toString) ---");

@@ -1,6 +1,7 @@
 package model;
 
 public class FixedDepositAccount extends Account implements Premium {
+    private static final long serialVersionUID = 4L;
     public FixedDepositAccount(String ownerName, long openingBalance) {
         super(ownerName, openingBalance);
     }
