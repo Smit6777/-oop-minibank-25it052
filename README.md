@@ -1,120 +1,133 @@
-# MiniBank (OOP Lab)
+# MiniBank — OOP Java Project
 
-Console banking application made for Java OOP lab.
-
-Roll No: 25IT052  
-Subject: Object-Oriented Programming with Java  
+A student banking application built lab by lab across 14 practicals.  
+Each PR maps to one lab session, so the Git history is your lab record.
 
 ---
 
-## Lab Practicals Done
-
-- **Practical 1: Basic Menu Setup**
-  - Setup basic project and main menu with Scanner.
-  - Used record `BankInfo` and enum `MenuOption` with switch expression.
-
-- **Practical 2: Customer and Account Classes**
-  - Created `Customer` and `Account` classes.
-  - Used private fields and getters for encapsulation.
-  - Balance can only be changed via `deposit()` and `withdraw()`.
-
-- **Practical 3: toString, equals and Nested Class**
-  - Added `toString()`, `equals()`, and `hashCode()` in `Account`.
-  - Added static nested class `Address` in `Customer`.
-  - Implemented `Cloneable` interface in `Customer`.
-
-- **Practical 4: Validation and Command Parser**
-  - Created regex validation for mobile, email, PAN and IFSC in `Validator`.
-  - Added `CommandParser` to split and read string commands like "DEPOSIT AC0001 500".
-  - Used `StringBuilder` in `StatementFormatter`.
-
-- **Practical 5: Inheritance and Polymorphism**
-  - Made `Account` abstract with `interestRate()` and `canWithdraw()`.
-  - Created subclasses: `SavingsAccount`, `CurrentAccount`, and `FixedDepositAccount`.
-  - Used polymorphism and `instanceof` check in main.
-
-- **Practical 6: Interfaces and Packages**
-  - Created interfaces: `Transactable`, `InterestBearing`, `WithdrawRule`, and marker interface `Premium`.
-  - Divided classes into packages: `model`, `service`, `util`.
-  - Created runnable `MiniBank.jar`.
-
-- **Practical 7: Custom Annotations and Reflection**
-  - Created annotations: `@Id`, `@Positive`, `@MaxLength` in `model.annotation`.
-  - Created `AnnotationValidator` using reflection to validate fields at runtime.
-
-- **Practical 8: Exception Handling**
-  - Created custom checked exceptions: `BankException`, `InsufficientFundsException`, `AccountNotFoundException`, `InvalidAmountException`.
-  - Used `try-catch-finally` and `try-with-resources`.
-
-- **Practical 9: Multithreading and Synchronization**
-  - Created `AccountWorker` implementing `Runnable`.
-  - Used `synchronized` on deposit/withdraw to prevent race conditions.
-
-- **Practical 10: Thread Pool and Deadlock Prevention**
-  - Used `ExecutorService` thread pool in `TransactionProcessor`.
-  - Used `wait()` and `notifyAll()` in `TransactionBuffer`.
-  - Fixed deadlock in `TransferService` by locking accounts in fixed order by account number.
-
----
-
-## Folder Structure
+## Project Structure
 
 ```
 MINIBANK/
-│── exception/
-│   ├── AccountNotFoundException.java
+├── MiniBank.java              # Main class — all PR demos + interactive menu
+├── model/
+│   ├── Account.java           # Abstract base (Serializable, Comparable)
+│   ├── SavingsAccount.java    # Savings with min-balance rule
+│   ├── CurrentAccount.java    # Current with overdraft limit
+│   ├── FixedDepositAccount.java
+│   ├── Customer.java          # Serializable customer entity
+│   ├── BankInfo.java          # Record type
+│   ├── Command.java           # Record for parsed commands
+│   ├── MenuOption.java        # Enum for menu choices
+│   ├── TransactionType.java   # Enum for DEPOSIT / WITHDRAW
+│   ├── Transactable.java      # Interface: deposit / withdraw / getBalance
+│   ├── InterestBearing.java   # Interface: interestRate / yearlyInterest (default)
+│   └── Premium.java           # Marker interface
+│   └── annotation/
+│       ├── Id.java            # @Id — marks the primary key field
+│       ├── Audit.java         # @Audit — marks service methods for logging
+│       ├── Positive.java      # @Positive — field must be > 0
+│       └── MaxLength.java     # @MaxLength — field max character length
+├── service/
+│   ├── BankService.java       # PR14: wires everything — open/deposit/withdraw/transfer/statement
+│   ├── Repository.java        # PR13: generic HashMap store with @Id reflection
+│   ├── AccountStore.java      # PR12: HashMap + ArrayList history + sortedByBalance
+│   ├── TransactionProcessor.java  # PR10: fixed thread pool + ConcurrentHashMap
+│   ├── AccountWorker.java     # PR9: Runnable for concurrent deposits
+│   ├── TransferService.java   # PR10: deadlock-safe transfer (lock ordering)
+│   ├── CommandParser.java     # PR4: parses "DEPOSIT AC0001 500" strings
+│   └── WithdrawRule.java      # PR5: functional interface for withdrawal rules
+├── util/
+│   ├── StatePersister.java    # PR11: ObjectOutputStream / ObjectInputStream
+│   ├── TransactionLog.java    # PR11: NIO append-only log
+│   ├── ReportGenerator.java   # PR11: NIO directory walk + end-of-day report
+│   ├── AuditLogger.java       # PR14: reflective logger for @Audit methods
+│   ├── AnnotationValidator.java # PR7: reflection-based field validator
+│   ├── StatementFormatter.java  # PR4: account statement builder
+│   ├── TransactionBuffer.java   # PR10: wait/notify producer-consumer buffer
+│   ├── TransactionSession.java  # PR6: AutoCloseable session (try-with-resources)
+│   └── Validator.java         # PR4: mobile / email / PAN / IFSC regex checks
+├── exception/
 │   ├── BankException.java
 │   ├── InsufficientFundsException.java
-│   └── InvalidAmountException.java
-│── model/
-│   ├── annotation/
-│   │   ├── Id.java
-│   │   ├── MaxLength.java
-│   │   └── Positive.java
-│   ├── Account.java
-│   ├── BankInfo.java
-│   ├── Command.java
-│   ├── CurrentAccount.java
-│   ├── Customer.java
-│   ├── FixedDepositAccount.java
-│   ├── InterestBearing.java
-│   ├── MenuOption.java
-│   ├── Premium.java
-│   ├── SavingsAccount.java
-│   ├── Transactable.java
-│   └── TransactionType.java
-│── service/
-│   ├── AccountWorker.java
-│   ├── CommandParser.java
-│   ├── TransactionProcessor.java
-│   ├── TransferService.java
-│   └── WithdrawRule.java
-│── util/
-│   ├── AnnotationValidator.java
-│   ├── StatementFormatter.java
-│   ├── TransactionBuffer.java
-│   ├── TransactionSession.java
-│   └── Validator.java
-│── MiniBank.java
-│── MiniBank.jar
-└── README.md
+│   ├── InvalidAmountException.java
+│   └── AccountNotFoundException.java
+├── test/
+│   └── BankServiceTest.java   # PR14: 8 JUnit 4 tests
+├── lib/
+│   ├── junit.jar
+│   └── hamcrest.jar
+├── MiniBank.jar               # Runnable JAR
+├── accounts.dat               # Serialized account state (auto-saved on exit)
+├── logs/transactions.log      # Append-only transaction log
+└── report.txt                 # End-of-day summary report
 ```
 
 ---
 
-## How to Run
+## How to Build & Run
 
-1. Compile:
-```bash
-javac -d bin MiniBank.java model/*.java model/annotation/*.java util/*.java service/*.java exception/*.java
+### Compile
+```powershell
+javac -d bin exception/*.java model/annotation/*.java model/*.java util/*.java service/*.java MiniBank.java
 ```
 
-2. Run:
-```bash
+### Run
+```powershell
 java -cp bin MiniBank
 ```
 
-Or run the jar file:
-```bash
+### Or use the JAR
+```powershell
 java -jar MiniBank.jar
 ```
+
+---
+
+## How to Run JUnit Tests
+
+```powershell
+# Compile tests
+javac -d bin -cp "bin;lib/junit.jar;lib/hamcrest.jar" test/BankServiceTest.java
+
+# Run tests
+java -cp "bin;lib/junit.jar;lib/hamcrest.jar" org.junit.runner.JUnitCore BankServiceTest
+```
+
+**Test Results:** 8/8 tests pass ✅
+
+| # | Test | What it checks |
+|---|------|---------------|
+| 1 | `testDepositIncreasesBalance` | Balance grows after deposit |
+| 2 | `testDepositZeroThrowsException` | Zero deposit → `InvalidAmountException` |
+| 3 | `testDepositNegativeThrowsException` | Negative deposit → `InvalidAmountException` |
+| 4 | `testWithdrawOverLimitThrowsException` | Below min-balance → `InsufficientFundsException` |
+| 5 | `testWithdrawReducesBalance` | Balance shrinks after withdraw |
+| 6 | `testConcurrentDepositsAreCorrect` | 10 threads × 100 deposits stay correct (sync check) |
+| 7 | `testAccountNumbersAreUnique` | Each account gets a unique number |
+| 8 | `testCompareToSortsByAccountNumber` | `Comparable` orders by account number |
+
+---
+
+## PR Summary
+
+| PR | Topic |
+|----|-------|
+| PR1 | Classes, objects, constructors, basic I/O |
+| PR2 | Inheritance, abstract classes, polymorphism |
+| PR3 | Interfaces, default methods, marker interfaces |
+| PR4 | Records, enums, static imports, string parsing |
+| PR5 | Functional interfaces, lambdas |
+| PR6 | Exception handling, try-with-resources |
+| PR7 | Custom annotations, reflection, validation |
+| PR8 | Inner classes, generics intro |
+| PR9 | Threads, synchronization, race conditions |
+| PR10 | Thread pool, producer-consumer, deadlock fix |
+| PR11 | Serialization, NIO file I/O, report generation |
+| PR12 | Collections — HashMap, ArrayList, Comparator, Comparable |
+| PR13 | Generic Repository with @Id reflection, bounded type params |
+| PR14 | BankService capstone — wires all layers + JUnit tests |
+
+---
+
+*Student: Smit Shah | IT052 | OOP Lab*
