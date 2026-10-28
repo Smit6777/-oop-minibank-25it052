@@ -1,5 +1,6 @@
 import exception.*;
 import model.*;
+import service.AccountStore;
 import service.AccountWorker;
 import service.CommandParser;
 import service.TransactionProcessor;
@@ -175,6 +176,29 @@ public class MiniBank {
 
         // Generate end of day report
         ReportGenerator.generate(logsFolder, reportFile);
+        System.out.println("----------------------------------------------------\n");
+
+        System.out.println("\n--- Testing PR12 Collections Framework ---");
+        AccountStore store = new AccountStore();
+        store.add(new SavingsAccount("Priya", 8000, 500));
+        store.add(new CurrentAccount("Raj", 3000, 1000));
+        store.add(new SavingsAccount("Neha", 15000, 500));
+        store.add(new FixedDepositAccount("Arjun", 500));
+
+        store.logTransaction("DEPOSIT 1000 to Priya");
+        store.logTransaction("WITHDRAW 500 from Raj");
+
+        System.out.println("All accounts sorted by balance:");
+        for (Account acc : store.sortedByBalance()) {
+            System.out.println(acc.toString());
+        }
+
+        System.out.println("\nTransaction history:");
+        for (String entry : store.getTransactionHistory()) {
+            System.out.println(" - " + entry);
+        }
+
+        System.out.println("\nFetch by account number (first account): " + store.getAll().values().iterator().next().getAccountNumber());
         System.out.println("----------------------------------------------------\n");
 
         System.out.println("\n--- Printing Accounts (Testing toString) ---");

@@ -1,5 +1,5 @@
 ==== END OF DAY REPORT ====
-Total Deposits   : Rs.800
-Total Withdrawals: Rs.200
-Net Flow         : Rs.600
+Total Deposits   : Rs.2400
+Total Withdrawals: Rs.600
+Net Flow         : Rs.1800
 ===========================
