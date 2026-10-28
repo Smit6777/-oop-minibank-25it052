@@ -3,6 +3,7 @@ import model.*;
 import service.AccountStore;
 import service.AccountWorker;
 import service.CommandParser;
+import service.Repository;
 import service.TransactionProcessor;
 import service.TransferService;
 import service.WithdrawRule;
@@ -199,6 +200,34 @@ public class MiniBank {
         }
 
         System.out.println("\nFetch by account number (first account): " + store.getAll().values().iterator().next().getAccountNumber());
+        System.out.println("----------------------------------------------------\n");
+
+        System.out.println("\n--- Testing PR13 Generic Repository ---");
+        Repository<Account> repo = new Repository<>();
+        repo.saveAll(
+            new SavingsAccount("Kiran", 5000, 500),
+            new CurrentAccount("Mehul", 2000, 1000),
+            new FixedDepositAccount("Pooja", 20000)
+        );
+
+        System.out.println("All accounts in repository:");
+        for (Account acc : repo.findAll()) {
+            System.out.println(acc.toString());
+        }
+
+        // Fetch one by id - get the first account from findAll
+        String firstId = repo.findAll().get(0).getAccountNumber();
+        Account found = repo.findById(firstId);
+        System.out.println("\nFetched by ID (" + firstId + "): " + found);
+
+        // Delete one
+        boolean deleted = repo.delete(firstId);
+        System.out.println("Deleted " + firstId + ": " + deleted);
+        System.out.println("Remaining accounts: " + repo.findAll().size());
+
+        // Test bounded generic average method
+        Long[] balances = {5000L, 2000L, 20000L};
+        System.out.println("Average balance: Rs." + Repository.average(balances));
         System.out.println("----------------------------------------------------\n");
 
         System.out.println("\n--- Printing Accounts (Testing toString) ---");
