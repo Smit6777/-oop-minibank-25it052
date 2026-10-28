@@ -25,6 +25,11 @@ import java.util.Scanner;
 public class MiniBank {
     public static void main(String[] args) {
         BankInfo info = new BankInfo("MiniBank", "Main Branch");
+        System.out.println("====================================================");
+        System.out.println("        MiniBank — OOP Java Lab Project             ");
+        System.out.println("        Student : Smit Makwana                      ");
+        System.out.println("        Roll No : 25IT052                           ");
+        System.out.println("====================================================");
         System.out.println("=== Welcome to " + info.name() + " (" + info.branch() + ") ===");
 
         // -------------------------------------------------------
