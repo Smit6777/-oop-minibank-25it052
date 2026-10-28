@@ -131,11 +131,3 @@ java -cp "bin;lib/junit.jar;lib/hamcrest.jar" org.junit.runner.JUnitCore BankSer
 ---
 
 *Student: Smit Makwana | Roll No: 25IT052 | OOP Lab*
-
----
-
-> ⚠️ **Blueprint Notice**
-> This repository belongs to **Smit Makwana (25IT052)**.
-> It was built lab by lab as part of the OOP Java course.
-> You are welcome to learn from it, but **do not submit it as your own work**.
-> Every commit, every file, every line was written for 25IT052.
