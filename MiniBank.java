@@ -272,6 +272,18 @@ public class MiniBank {
         for (String err : errors) { System.out.println(" - " + err); }
         System.out.println("------------------------------\n");
 
+        System.out.println("\n--- Testing PR8 Customer Cloning (Cloneable) ---");
+        try {
+            Customer originalCustomer = new Customer("CUST001", "Smit Makwana", "smit@example.com", "9876543210");
+            Customer clonedCustomer = originalCustomer.clone();
+            System.out.println("Original Customer: " + originalCustomer);
+            System.out.println("Cloned Customer  : " + clonedCustomer);
+            System.out.println("Are both references identical? " + (originalCustomer == clonedCustomer) + " (Proves separate memory copy)");
+        } catch (Exception e) {
+            System.out.println("Cloning error: " + e.getMessage());
+        }
+        System.out.println("------------------------------\n");
+
         System.out.println("\n--- Testing PR4 Features ---");
         System.out.println("Valid Mobile (9876543210): " + Validator.isValidMobile("9876543210"));
         System.out.println("Valid Email (test@example.com): " + Validator.isValidEmail("test@example.com"));
